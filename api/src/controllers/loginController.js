@@ -16,7 +16,7 @@ const generateRefreshToken = (user) => {
 
 const login = async (username, password) => {
   try {
-    const user = User.findOne({
+    const user = await User.findOne({
       where: {
         username: username,
       },
@@ -43,3 +43,5 @@ const login = async (username, password) => {
     throw new Error(error.message);
   }
 };
+
+module.exports = { login };
