@@ -8,7 +8,7 @@ const {
 const router = Router();
 
 router.post("/", createUserHandler);
-reoter.get("/", getAllUsersHandler);
+router.get("/", getAllUsersHandler);
 router.get("/:id", getUserByIdHandler);
 
 module.exports = router;
