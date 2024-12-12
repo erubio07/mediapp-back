@@ -1,4 +1,4 @@
-const { User } = require("../db");
+const { User, Role } = require("../db");
 
 const fillUser = async () => {
   try {
@@ -9,6 +9,7 @@ const fillUser = async () => {
       username: "erubio07",
       password: "2423122621",
     });
+    await user1.setRole(1);
   } catch (error) {
     throw new Error(error.message);
   }
