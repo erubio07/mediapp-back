@@ -4,6 +4,7 @@ const {
   getAllUsers,
   deleteUser,
   restoreUser,
+  updateUser,
 } = require("../controllers/userControllers");
 
 const createUserHandler = async (req, res) => {
@@ -62,10 +63,22 @@ const restoreUserHandler = async (req, res) => {
   }
 };
 
+const updatedUserHandler = async (req, res) => {
+  const { name, surname, mail } = req.body;
+  const { id } = req.params;
+  try {
+    const updatedUser = await updateUser(id, name, surname, mail);
+    res.status(200).json(updatedUser);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
 module.exports = {
   createUserHandler,
   getUserByIdHandler,
   getAllUsersHandler,
   deleteUserHandler,
   restoreUserHandler,
+  updatedUserHandler,
 };

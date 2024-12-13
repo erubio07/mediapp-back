@@ -72,10 +72,28 @@ const restoreUser = async (id) => {
   }
 };
 
+const updateUser = async (id, name, surname, mail) => {
+  try {
+    if (!id)
+      throw new Error("Se debe especificar el id del usuario a modificar");
+    const user = await User.findByPk(id);
+    if (!user) throw new Error("No hay usuarios para el id proporcionado");
+    const updatedUser = await user.update({
+      name,
+      surname,
+      mail,
+    });
+    return updatedUser;
+  } catch (error) {
+    throw new Error(error.message);
+  }
+};
+
 module.exports = {
   createUser,
   getUserById,
   getAllUsers,
   deleteUser,
   restoreUser,
+  updateUser,
 };
