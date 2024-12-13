@@ -35,6 +35,7 @@ const getAllUsers = async () => {
   try {
     const allUsers = await User.findAll({
       include: [{ model: Role }],
+      paranoid: false,
     });
     return allUsers;
   } catch (error) {
@@ -42,4 +43,39 @@ const getAllUsers = async () => {
   }
 };
 
-module.exports = { createUser, getUserById, getAllUsers };
+const deleteUser = async (id) => {
+  try {
+    if (!id) throw new Error("Debe proporcionar el id del usuario a eliminar");
+    await User.destroy({
+      where: {
+        id: id,
+      },
+    });
+    return "Usuario eliminado con éxito";
+  } catch (error) {
+    throw new Error(error.message);
+  }
+};
+
+const restoreUser = async (id) => {
+  try {
+    if (!id)
+      throw new Error("Se debe proporcionar el id del usuario a restaurar");
+    await User.restore({
+      where: {
+        id: id,
+      },
+    });
+    return "Usuario restaurado con éxito";
+  } catch (error) {
+    throw new Error(error.message);
+  }
+};
+
+module.exports = {
+  createUser,
+  getUserById,
+  getAllUsers,
+  deleteUser,
+  restoreUser,
+};
