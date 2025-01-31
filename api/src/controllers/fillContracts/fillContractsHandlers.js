@@ -7,7 +7,10 @@ const generateDocument = (data) => {
   console.log(data);
 
   // Ruta al archivo de plantilla
-  const templatePath = path.join(__dirname, "ACTA DE AUDIENCIA_template.docx");
+  const templatePath = path.join(
+    __dirname,
+    "1-0- CONV.CONFIDENCIALIDAD JUD VIRTUAL1b_template.docx"
+  );
 
   // Validar si el archivo existe
   if (!fs.existsSync(templatePath)) {
@@ -43,6 +46,7 @@ const generateDocument = (data) => {
   const reuqeridoDni = data.requerido?.dni || "00.000.000";
 
   doc.setData({
+    expediente: data.expediente || "Sin Definir",
     number: data.number || "00000",
     date: data.date || "Sin definir",
     hour: data.hour || "00:00",
