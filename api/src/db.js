@@ -4,7 +4,7 @@ const fs = require("fs");
 const path = require("path");
 
 const sequelize = new Sequelize(
-  "postgres://koyeb-adm:c9qaN2eYPFMA@ep-crimson-wave-a2xpgsf0.eu-central-1.pg.koyeb.app/koyebdb?sslmode=require",
+  "postgres://koyeb-adm:npg_CqBOTf0kl2FP@ep-crimson-wave-a2xpgsf0.eu-central-1.pg.koyeb.app/koyebdb?sslmode=require",
   {
     logging: false, // set to console.log to see the raw SQL queries
     native: false, // lets Sequelize know we can use pg-native for ~30% more speed
