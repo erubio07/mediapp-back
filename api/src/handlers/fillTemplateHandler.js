@@ -1,6 +1,9 @@
 const {
   generateDocument,
 } = require("../controllers/fillContracts/fillContractsHandlers");
+const {
+  generateActaAudienciaVirt,
+} = require("../controllers/fillContracts/fillActaAudiencia");
 
 const fillTemplateHandler = async (req, res) => {
   try {
@@ -13,11 +16,11 @@ const fillTemplateHandler = async (req, res) => {
     // Configurar encabezados de respuesta
     res.setHeader(
       "Content-Disposition",
-      "attachment; filename=documento_generado.docx"
+      "attachment; filename=documento_generado.docx",
     );
     res.setHeader(
       "Content-Type",
-      "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
     );
 
     // Enviar documento generado
@@ -28,4 +31,29 @@ const fillTemplateHandler = async (req, res) => {
   }
 };
 
-module.exports = { fillTemplateHandler };
+const fillActaAudiencia = async (req, res) => {
+  try {
+    // Obtener datos del request
+    const data = req.body;
+
+    // Generar el documento
+    const generatedDocument = generateActaAudienciaVirt(data);
+
+    // Configurar encabezados de respuesta
+    res.setHeader(
+      "Content-Disposition",
+      "attachment; filename=documento_generado.docx",
+    );
+    res.setHeader(
+      "Content-Type",
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    );
+
+    // Enviar documento generado
+    res.send(generatedDocument);
+  } catch (error) {
+    console.error("Error:", error.message);
+    res.status(500).send(error.message);
+  }
+};
+module.exports = { fillTemplateHandler, fillActaAudiencia };

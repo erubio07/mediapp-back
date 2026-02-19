@@ -3,13 +3,13 @@ const path = require("path");
 const PizZip = require("pizzip");
 const Docxtemplater = require("docxtemplater");
 
-const generateDocument = (data) => {
+const generateActaAudienciaVirt = (data) => {
   console.log(data);
 
   // Ruta al archivo de plantilla
   const templatePath = path.join(
     __dirname,
-    "1-1- ACTA Audiencia VIRTUAL CJM 2b.docx"
+    "1-1- ACTA Audiencia VIRTUAL CJM 2b.docx",
   );
 
   // Validar si el archivo existe
@@ -40,6 +40,8 @@ const generateDocument = (data) => {
 
   // Configurar los datos y renderizar el documento
 
+  //Datos requirente
+
   const requirenteName = data.requirente?.name || "Sin Definir";
   const requirenteAdress = data.requirente?.adress || "Sin Definir";
   const requirenteDni = data.requirente?.dni || "00.000.000";
@@ -56,6 +58,8 @@ const generateDocument = (data) => {
     data.requirente?.mediador?.name || "Sin definir";
   const requirenteMediadorMat = data.requirente?.mediador?.mat || "Sin definir";
 
+  //datos requerido
+
   const requeridoName = data.requerido?.name || "Sin Definir";
   const reuqeridoDni = data.requerido?.dni || "00.000.000";
   const requeridoAdress = data.requerido?.adress || "Sin Definir";
@@ -68,6 +72,8 @@ const generateDocument = (data) => {
   const requeridoLetradoPhone = data.requerido?.letrado?.phone || "Sin definir";
   const requeridoMediadorName = data.requerido?.mediador?.name || "Sin definir";
   const requeridoMediadorMat = data.requerido?.mediador?.mat || "Sin definir";
+
+  //datos tercero
 
   const terceroName = data.tercero?.name || "Sin definir";
   const terceroDni = data.tercero?.dni || "Sin definir";
@@ -86,10 +92,43 @@ const generateDocument = (data) => {
     nextDate: data.nextDate || "Sin definir",
     adressMediacion: data.adressMediacion,
     abogadoPatrocinante: data.abogadoPatrocinante,
+
+    // Requirente
+
     requirente_name: requirenteName,
+    requirente_adress: requirenteAdress,
     requirente_dni: requirenteDni,
+    requirente_email: requirenteEmail,
+    requirente_phoneNumber: requirentePhoneNumber,
+    requirente_letrado_name: requirenteLetradoName,
+    requirente_letrado_adress: requirenteLetradoAdress,
+    requirente_letrado_email: requirenteLetradoEmail,
+    requirente_letrado_phoneNumber: requirenteLetradoPhone,
+    requirente_mediador_name: requirenteMediadorName,
+    requirente_mediador_mat: requirenteMediadorMat,
+
+    //Requerido
+
     requerido_name: requeridoName,
+    requerido_adress: requeridoAdress,
     requerido_dni: reuqeridoDni,
+    requerido_email: requeridoEmail,
+    requerido_phoneNumber: requeridoPhoneNumber,
+    requerido_letrado_name: requeridoLetradoName,
+    requerido_letrado_adress: requeridoLetradoAdress,
+    requerido_letrado_email: requeridoLetradoEmail,
+    requerido_letrado_phoneNumber: requeridoLetradoPhone,
+    requerido_mediador_name: requeridoMediadorName,
+    requerido_mediador_mat: requeridoMediadorMat,
+
+    //Tercero
+
+    tercero_name: terceroName,
+    tercero_dni: terceroDni,
+    tercero_adress: terceroAdress,
+    tercero_cp: terceroCp,
+    tercero_phoneNumber: terceroPhoneNumber,
+    tercero_cellPhone: terceroCellPhone,
   });
 
   try {
@@ -103,4 +142,4 @@ const generateDocument = (data) => {
   return doc.getZip().generate({ type: "nodebuffer" });
 };
 
-module.exports = { generateDocument };
+module.exports = { generateActaAudienciaVirt };
