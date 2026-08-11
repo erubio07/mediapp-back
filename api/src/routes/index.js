@@ -8,6 +8,5 @@ const router = Router();
 router.use("/login", login);
 router.use("/user", user);
 router.use("/fill", fillTemplate);
-router.use("/fill/actaAudienciaVirtual", fillTemplate);
 
 module.exports = router;
