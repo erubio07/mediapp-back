@@ -6,12 +6,14 @@ require("dotenv").config();
 
 const generateAccessToken = (user) => {
   return jwt.sign({ id: user.id }, process.env.ACCESS_TOKEN, {
-    expiresIn: 1800000,
+    expiresIn: "30m",
   });
 };
 
 const generateRefreshToken = (user) => {
-  return jwt.sign({ id: user.id }, process.env.REFRESH_TOKEN);
+  return jwt.sign({ id: user.id }, process.env.REFRESH_TOKEN,
+    {expiresIn: "7d"},
+  );
 };
 
 const login = async (username, password) => {
