@@ -8,7 +8,7 @@ const sequelize = new Sequelize(
   {
     logging: false, // set to console.log to see the raw SQL queries
     native: false, // lets Sequelize know we can use pg-native for ~30% more speed
-  }
+  },
 );
 const basename = path.basename(__filename);
 
@@ -18,7 +18,7 @@ const modelDefiners = [];
 fs.readdirSync(path.join(__dirname, "/models"))
   .filter(
     (file) =>
-      file.indexOf(".") !== 0 && file !== basename && file.slice(-3) === ".js"
+      file.indexOf(".") !== 0 && file !== basename && file.slice(-3) === ".js",
   )
   .forEach((file) => {
     modelDefiners.push(require(path.join(__dirname, "/models", file)));
@@ -36,13 +36,16 @@ sequelize.models = Object.fromEntries(capsEntries);
 
 // En sequelize.models están todos los modelos importados como propiedades
 // Para relacionarlos hacemos un destructuring
-const { User, Role } = sequelize.models;
+const { User, Role, Mediation } = sequelize.models;
 
 // Aca vendrian las relaciones
 // Product.hasMany(Reviews);
 
 User.belongsTo(Role);
 Role.hasMany(User);
+
+User.hasMany(Mediation);
+Mediation.belongsTo(User);
 
 module.exports = {
   ...sequelize.models, // para poder importar los modelos así: const { Product, User } = require('./db.js');
