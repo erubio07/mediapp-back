@@ -11,9 +11,9 @@ const generateAccessToken = (user) => {
 };
 
 const generateRefreshToken = (user) => {
-  return jwt.sign({ id: user.id }, process.env.REFRESH_TOKEN,
-    {expiresIn: "7d"},
-  );
+  return jwt.sign({ id: user.id }, process.env.REFRESH_TOKEN, {
+    expiresIn: "7d",
+  });
 };
 
 const login = async (username, password) => {
