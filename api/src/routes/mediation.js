@@ -11,6 +11,6 @@ const router = Router();
 router.post("/", createMediationHandler);
 router.patch("/:id", updateMediationHandler);
 router.get("/number/:number", getMediationByNumberHandler);
-router.get("/");
+router.get("/", getUserMediationsHandler);
 
 module.exports = router;
