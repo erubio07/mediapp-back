@@ -102,4 +102,55 @@ const updateMediation = async (mediationId, data, userId) => {
   }
 };
 
-module.exports = { createMediation, updateMediation };
+const getMediationByNumber = async (number, userId) => {
+  try {
+    if (!userId) {
+      throw new Error("Usuario no identificado");
+    }
+
+    if (!number) {
+      throw new Error("El número de mediacion es obligatorio");
+    }
+
+    const mediation = await Mediation.findOne({
+      where: {
+        number: number,
+        UserId: userId,
+      },
+    });
+
+    if (!mediation) {
+      throw new Error("Mediación no encontrada");
+    }
+
+    return mediation;
+  } catch (error) {
+    throw new Error(error.message);
+  }
+};
+
+const getUserMediations = async (userId) => {
+  try {
+    if (!userId) {
+      throw new Error("Usuario no identificado");
+    }
+
+    const mediations = await Mediation.findAll({
+      where: {
+        UserId: userId,
+      },
+      order: [["updatedAt", "DESC"]],
+    });
+
+    return mediations;
+  } catch (error) {
+    throw new Error(error.message);
+  }
+};
+
+module.exports = {
+  createMediation,
+  updateMediation,
+  getMediationByNumber,
+  getUserMediations,
+};
