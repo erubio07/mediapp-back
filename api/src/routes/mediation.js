@@ -4,13 +4,15 @@ const {
   updateMediationHandler,
   getMediationByNumberHandler,
   getUserMediationsHandler,
+  searchMediationsByNameHandler,
 } = require("../handlers/mediationHandler");
 
 const router = Router();
 
 router.post("/", createMediationHandler);
-router.patch("/:id", updateMediationHandler);
+router.get("/search", searchMediationsByNameHandler);
 router.get("/number/:number", getMediationByNumberHandler);
 router.get("/", getUserMediationsHandler);
+router.patch("/:id", updateMediationHandler);
 
 module.exports = router;
