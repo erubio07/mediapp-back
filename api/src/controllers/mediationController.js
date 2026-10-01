@@ -1,4 +1,19 @@
 const { Mediation } = require("../db");
+const { Op, Sequelize } = require("sequelize");
+
+const normalizeDate = (value) => {
+  if (value === undefined || value === null) {
+    return null;
+  }
+
+  const cleanValue = String(value).trim();
+
+  if (!cleanValue) {
+    return null;
+  }
+
+  return cleanValue;
+};
 
 const createMediation = async (data, userId) => {
   try {
@@ -18,11 +33,13 @@ const createMediation = async (data, userId) => {
       expediente: data.expediente,
       number: data.number,
 
-      date: data.date || null,
+      date: normalizeDate(data.date),
+
       hour: data.hour || null,
       start: data.start || null,
       end: data.end || null,
-      nextDate: data.nextDate || null,
+
+      nextDate: normalizeDate(data.nextDate),
 
       adressMediacion: data.adressMediacion || null,
 
@@ -69,15 +86,19 @@ const updateMediation = async (mediationId, data, userId) => {
 
       number: data.number ?? mediation.number,
 
-      date: data.date ?? mediation.date,
+      // FECHAS
+      date: data.date !== undefined ? normalizeDate(data.date) : mediation.date,
 
-      hour: data.hour ?? mediation.hour,
+      hour: data.hour !== undefined ? data.hour || null : mediation.hour,
 
-      start: data.start ?? mediation.start,
+      start: data.start !== undefined ? data.start || null : mediation.start,
 
-      end: data.end ?? mediation.end,
+      end: data.end !== undefined ? data.end || null : mediation.end,
 
-      nextDate: data.nextDate ?? mediation.nextDate,
+      nextDate:
+        data.nextDate !== undefined
+          ? normalizeDate(data.nextDate)
+          : mediation.nextDate,
 
       adressMediacion: data.adressMediacion ?? mediation.adressMediacion,
 
@@ -140,6 +161,51 @@ const getUserMediations = async (userId) => {
         UserId: userId,
       },
       order: [["updatedAt", "DESC"]],
+      limit: 10,
+    });
+
+    return mediations;
+  } catch (error) {
+    throw new Error(error.message);
+  }
+};
+
+const searchMediationsByName = async (name, userId) => {
+  try {
+    if (!userId) {
+      throw new Error("Usuario no identificado");
+    }
+
+    if (!name || !name.trim()) {
+      throw new Error("Debe ingresar un nombre o apellido");
+    }
+
+    const search = `%${name.trim()}%`;
+
+    const mediations = await Mediation.findAll({
+      where: {
+        UserId: userId,
+
+        [Op.or]: [
+          Sequelize.where(Sequelize.json("requirente.name"), {
+            [Op.iLike]: search,
+          }),
+
+          Sequelize.where(Sequelize.json("requirente.surname"), {
+            [Op.iLike]: search,
+          }),
+
+          Sequelize.where(Sequelize.json("requerido.name"), {
+            [Op.iLike]: search,
+          }),
+
+          Sequelize.where(Sequelize.json("requerido.surname"), {
+            [Op.iLike]: search,
+          }),
+        ],
+      },
+
+      order: [["updatedAt", "DESC"]],
     });
 
     return mediations;
@@ -153,4 +219,5 @@ module.exports = {
   updateMediation,
   getMediationByNumber,
   getUserMediations,
+  searchMediationsByName,
 };

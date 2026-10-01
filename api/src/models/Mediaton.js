@@ -39,7 +39,7 @@ module.exports = (sequelize) => {
       },
 
       nextDate: {
-        type: DataTypes.DATE,
+        type: DataTypes.DATEONLY,
         allowNull: true,
       },
 

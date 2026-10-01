@@ -34,11 +34,11 @@ const updateMediationHandler = async (req, res) => {
     const mediation = await updateMediation(id, data, userId);
 
     return res.status(200).json({
-      mesage: "Mediación actualizada correctamente",
+      message: "Mediación actualizada correctamente",
       mediation,
     });
   } catch (error) {
-    console.error("Error actualizando la mediación", error.mesage);
+    console.error("Error actualizando la mediación", error.message);
 
     return res.status(400).json({
       error: error.message,
@@ -58,7 +58,7 @@ const getMediationByNumberHandler = async (req, res) => {
       mediation,
     });
   } catch (error) {
-    console.error("Error buscando la mediación: ", message);
+    console.error("Error buscando la mediación: ", error.message);
   }
 
   return res.status(400).json({
