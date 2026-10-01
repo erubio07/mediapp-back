@@ -170,41 +170,55 @@ const getUserMediations = async (userId) => {
   }
 };
 
-const searchMediationsByName = async (name, userId) => {
+const searchMediations = async (filters, userId) => {
   try {
     if (!userId) {
       throw new Error("Usuario no identificado");
     }
 
-    if (!name || !name.trim()) {
-      throw new Error("Debe ingresar un nombre o apellido");
+    const { name, number, date } = filters;
+
+    const where = {
+      UserId: userId,
+    };
+
+    // Búsqueda por nombre o apellido
+    if (name && name.trim()) {
+      const search = `%${name.trim()}%`;
+
+      where[Op.or] = [
+        Sequelize.where(Sequelize.json("requirente.name"), {
+          [Op.iLike]: search,
+        }),
+
+        Sequelize.where(Sequelize.json("requirente.surname"), {
+          [Op.iLike]: search,
+        }),
+
+        Sequelize.where(Sequelize.json("requerido.name"), {
+          [Op.iLike]: search,
+        }),
+
+        Sequelize.where(Sequelize.json("requerido.surname"), {
+          [Op.iLike]: search,
+        }),
+      ];
     }
 
-    const search = `%${name.trim()}%`;
+    // Búsqueda por número
+    if (number && number.trim()) {
+      where.number = {
+        [Op.iLike]: `%${number.trim()}%`,
+      };
+    }
+
+    // Búsqueda por fecha
+    if (date && date.trim()) {
+      where.date = date.trim();
+    }
 
     const mediations = await Mediation.findAll({
-      where: {
-        UserId: userId,
-
-        [Op.or]: [
-          Sequelize.where(Sequelize.json("requirente.name"), {
-            [Op.iLike]: search,
-          }),
-
-          Sequelize.where(Sequelize.json("requirente.surname"), {
-            [Op.iLike]: search,
-          }),
-
-          Sequelize.where(Sequelize.json("requerido.name"), {
-            [Op.iLike]: search,
-          }),
-
-          Sequelize.where(Sequelize.json("requerido.surname"), {
-            [Op.iLike]: search,
-          }),
-        ],
-      },
-
+      where,
       order: [["updatedAt", "DESC"]],
     });
 
@@ -219,5 +233,5 @@ module.exports = {
   updateMediation,
   getMediationByNumber,
   getUserMediations,
-  searchMediationsByName,
+  searchMediations,
 };

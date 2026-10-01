@@ -3,7 +3,7 @@ const {
   updateMediation,
   getMediationByNumber,
   getUserMediations,
-  searchMediationsByName,
+  searchMediations,
 } = require("../controllers/mediationController");
 
 const createMediationHandler = async (req, res) => {
@@ -86,22 +86,26 @@ const getUserMediationsHandler = async (req, res) => {
   }
 };
 
-const searchMediationsByNameHandler = async (req, res) => {
+const searchMediationsHandler = async (req, res) => {
   try {
-    const { name } = req.query;
+    const { name, number, date } = req.query;
     const userId = req.userId;
 
-    const mediations = await searchMediationsByName(name, userId);
+    const mediations = await searchMediations(
+      {
+        name,
+        number,
+        date,
+      },
+      userId,
+    );
 
     return res.status(200).json({
       message: "Búsqueda realizada correctamente",
       mediations,
     });
   } catch (error) {
-    console.error(
-      "Error buscando mediaciones por nombre o apellido:",
-      error.message,
-    );
+    console.error("Error buscando mediaciones:", error.message);
 
     return res.status(400).json({
       error: error.message,
@@ -114,5 +118,5 @@ module.exports = {
   updateMediationHandler,
   getMediationByNumberHandler,
   getUserMediationsHandler,
-  searchMediationsByNameHandler,
+  searchMediationsHandler,
 };
